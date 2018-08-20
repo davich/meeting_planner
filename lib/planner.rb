@@ -38,16 +38,3 @@ class Planner
     [slots_a[index_a][1], slots_b[index_b][1]].min - [slots_a[index_a][0], slots_b[index_b][0]].max
   end
 end
-
-
-slots_a = [[10, 50], [60, 120], [140, 210]]
-slots_b = [[0, 8], [51, 70]]
-dur = 8
-puts Planner.new(slots_a, slots_b, dur).meeting_planner
-puts "Should equal [60, 68]"
-
-#1 4 6 7 12 15
-#3 9 15 20
-
-#[50, 65], [70, 90]
-#[60, 100]
