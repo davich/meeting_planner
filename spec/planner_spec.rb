@@ -1,19 +1,19 @@
 require 'rspec'
-require_relative 'planner'
+require 'planner'
 
 RSpec.describe 'Planner' do
-  describe 'meeting_planner' do
-    let(:overlapping_timeslots) {
-      slotsA = [[10, 50], [60, 120], [140, 210]],
-      slotsB = [[0, 15], [60, 70]],
-      dur = 8
-    }
+  let(:overlapping_timeslots) {
+    slotsA = [[10, 50], [60, 120], [140, 210]],
+    slotsB = [[0, 15], [60, 70]],
+    dur = 8
+  }
 
-    let(:no_overlapping_timeslots) {
-      slotsA = [[10, 50], [60, 120], [140, 210]],
-      slotsB = [[0, 15], [60, 70]],
-      dur = 12
-    }
+  let(:no_overlapping_timeslots) {
+    slotsA = [[10, 50], [60, 120], [140, 210]],
+    slotsB = [[0, 15], [60, 70]],
+    dur = 12
+  }
+  describe 'meeting_planner' do
     context 'overlap' do
       it 'returns a timeslot start and end time' do
         expect(overlapping_timeslots.meeting_planner).to eq([60, 68])
