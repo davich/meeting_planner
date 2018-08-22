@@ -9,16 +9,17 @@ class Planner
     index_a = 0
     index_b = 0
     while index_a < slots_a.size && index_b < slots_b.size
-      if slot_a_start(index_a) > slot_b_end(index_b)
+      slot_planner = SlotPlanner.new(slots_a[index_a], slots_b[index_b], dur)
+      if slot_planner.slot_a_start > slot_planner.slot_b_end
         index_b += 1
-      elsif slot_b_start(index_b) > slot_a_end(index_a)
+      elsif slot_planner.slot_b_start > slot_planner.slot_a_end
         index_a += 1
       else
-        if large_enough_overlap?(index_a, index_b)
-          largest_start = largest_start_time(index_a, index_b)
+        if slot_planner.large_enough_overlap?
+          largest_start = slot_planner.largest_start_time
           return [largest_start, largest_start + dur]
         else
-          if slot_a_end(index_a) < slot_b_end(index_b)
+          if slot_planner.slot_a_end < slot_planner.slot_b_end
             index_a += 1
           else
             index_b += 1
@@ -31,36 +32,46 @@ class Planner
   private
 
   attr_reader :slots_a, :slots_b, :dur
+end
 
-  def large_enough_overlap?(index_a, index_b)
-    overlap_size(index_a, index_b) >= dur
+class SlotPlanner
+  def initialize(slot_a, slot_b, dur)
+    @slot_a = slot_a
+    @slot_b = slot_b
+    @dur = dur
   end
 
-  def slot_a_start(index_a)
-    slots_a[index_a][0]
+  attr_reader :dur, :slot_a, :slot_b
+
+  def large_enough_overlap?
+    overlap_size >= dur
   end
 
-  def slot_a_end(index_a)
-    slots_a[index_a][1]
+  def slot_a_start
+    slot_a[0]
   end
 
-  def slot_b_start(index_b)
-    slots_b[index_b][0]
+  def slot_a_end
+    slot_a[1]
   end
 
-  def slot_b_end(index_b)
-    slots_b[index_b][1]
+  def slot_b_start
+    slot_b[0]
   end
 
-  def overlap_size(index_a, index_b)
-    smallest_end_time(index_a, index_b) - largest_start_time(index_a, index_b)
+  def slot_b_end
+    slot_b[1]
   end
 
-  def largest_start_time(index_a, index_b)
-    [slots_a[index_a][0], slots_b[index_b][0]].max
+  def overlap_size
+    smallest_end_time - largest_start_time
   end
 
-  def smallest_end_time(index_a, index_b)
-    [slots_a[index_a][1], slots_b[index_b][1]].min
+  def largest_start_time
+    [slot_a[0], slot_b[0]].max
+  end
+
+  def smallest_end_time
+    [slot_a[1], slot_b[1]].min
   end
 end
