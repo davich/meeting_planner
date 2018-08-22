@@ -14,7 +14,7 @@ class Planner
       elsif slot_b_start(index_b) > slot_a_end(index_a)
         index_a += 1
       else
-        if overlap_size(index_a, index_b) >= dur
+        if large_enough_overlap?(index_a, index_b)
           largest_start = largest_start_time(index_a, index_b)
           return [largest_start, largest_start + dur]
         else
@@ -31,6 +31,10 @@ class Planner
   private
 
   attr_reader :slots_a, :slots_b, :dur
+
+  def large_enough_overlap?(index_a, index_b)
+    overlap_size(index_a, index_b) >= dur
+  end
 
   def slot_a_start(index_a)
     slots_a[index_a][0]
