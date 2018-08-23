@@ -30,20 +30,14 @@ class SlotPlanner
   end
 
   def plan
-    if slot_b_starts_after_slot_a_ends?
+    return { increment_index_a: true } if slot_b_starts_after_slot_a_ends?
+    return { increment_index_b: true } if slot_a_starts_after_slot_b_ends?
+    return { slot_found: first_overlap_of_dur } if large_enough_overlap?
+
+    if slot_a_ends_first?
       { increment_index_a: true }
-    elsif slot_a_starts_after_slot_b_ends?
-      { increment_index_b: true }
     else
-      if large_enough_overlap?
-        { slot_found: first_overlap_of_dur }
-      else
-        if slot_a_ends_first?
-          { increment_index_a: true }
-        else
-          { increment_index_b: true }
-        end
-      end
+      { increment_index_b: true }
     end
   end
 
