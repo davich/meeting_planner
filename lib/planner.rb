@@ -10,16 +10,15 @@ class Planner
     index_b = 0
     while index_a < slots_a.size && index_b < slots_b.size
       slot_planner = SlotPlanner.new(slots_a[index_a], slots_b[index_b], dur)
-      if slot_planner.slot_a_start > slot_planner.slot_b_end
+      if slot_planner.increment_index_b?
         index_b += 1
-      elsif slot_planner.slot_b_start > slot_planner.slot_a_end
+      elsif slot_planner.increment_index_a?
         index_a += 1
       else
         if slot_planner.large_enough_overlap?
-          largest_start = slot_planner.largest_start_time
-          return [largest_start, largest_start + dur]
+          return slot_planner.first_overlap_of_dur
         else
-          if slot_planner.slot_a_end < slot_planner.slot_b_end
+          if slot_planner.slot_a_ends_first?
             index_a += 1
           else
             index_b += 1
@@ -41,11 +40,29 @@ class SlotPlanner
     @dur = dur
   end
 
-  attr_reader :dur, :slot_a, :slot_b
+  def slot_a_ends_first?
+    slot_a_end < slot_b_end
+  end
+
+  def first_overlap_of_dur
+    [largest_start_time, largest_start_time + dur]
+  end
+
+  def increment_index_a?
+    slot_b_start > slot_a_end
+  end
+
+  def increment_index_b?
+    slot_a_start > slot_b_end
+  end
 
   def large_enough_overlap?
     overlap_size >= dur
   end
+
+  private
+
+  attr_reader :dur, :slot_a, :slot_b
 
   def slot_a_start
     slot_a[0]
