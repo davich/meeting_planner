@@ -22,7 +22,7 @@ class Planner
   def meeting_planner2
     result = [0, 0]
     begin
-      continue, result = _meeting_planner(*result)
+      continue, result = _meeting_planner2(*result)
     end while continue == true
     result
   end
@@ -41,7 +41,7 @@ class Planner
   end
 
   def meeting_planner3
-    _meeting_planner(0, 0)
+    _meeting_planner3(0, 0)
   end
 
   def _meeting_planner3(index_a, index_b)
