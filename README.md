@@ -1,6 +1,4 @@
-# time_planner
-
-Time Planner
+# Meeting Planner
 
 Implement a function meetingPlanner that given the availability, slotsA and slotsB, of two people and a meeting duration dur, returns the earliest time slot that works for both of them and is of duration dur. If there is no common time slot that satisfies the duration requirement, return null.
 
